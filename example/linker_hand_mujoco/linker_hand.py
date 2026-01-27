@@ -52,19 +52,24 @@ def mujoco_thread():
 def print_joint_data():
     """打印所有关节的实时状态"""
     print("\n" + "=" * 80)
+    #data.time：MuJoCo 内部维护的 仿真时间（秒）,.2f：保留两位小数
     print(f"Time: {data.time:.2f}s")
     print("=" * 80)
     
     for i in range(model.njnt):
+        # MuJoCo 内部：所有对象都是 整数 ID,名字只存在于 XML & model 中
+         
         jnt_name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_JOINT, i)
         if jnt_name not in joint_names:  # 只打印手指关节
             continue
-            
+        
+        # joint i 的位置，在 data.qpos 的第 qpos_adr 位
         qpos_adr = model.jnt_qposadr[i]
         qvel_adr = model.jnt_dofadr[i]
         
         # 获取关节数据
         pos = data.qpos[qpos_adr]
+        # 如果qvel_adr == -1，则表示该关节没有速度自由度（如固定关节）
         vel = data.qvel[qvel_adr] if qvel_adr != -1 else 0
         torque = data.qfrc_actuator[qvel_adr] if qvel_adr != -1 else 0
         
@@ -78,15 +83,20 @@ def print_joint_data():
 class ControlWindow(QWidget):
     def __init__(self):
         super().__init__()
+        # 设置窗口标题和大小
         self.setWindowTitle("Joint Controller")
         self.setGeometry(100, 100, 400, 80 + 50 * joint_count)
 
+        # 垂直布局
         layout = QVBoxLayout()
         self.sliders = []
         
         for i in range(joint_count):
+            # 控制范围
             min_val, max_val = ctrl_ranges[i]
+            # 标签，显示关节名称和范围
             label = QLabel(f"{joint_names[i]} [{min_val:.2f}, {max_val:.2f}]")
+            # 创建水平滑块
             slider = QSlider(Qt.Horizontal)
             slider.setMinimum(int(min_val * 100))
             slider.setMaximum(int(max_val * 100))
@@ -108,6 +118,7 @@ class ControlWindow(QWidget):
 if __name__ == "__main__":
     # 启动 MuJoCo 模拟线程
     sim_thread = threading.Thread(target=mujoco_thread)
+    
     sim_thread.daemon = True  # 主线程退出时自动结束
     sim_thread.start()
 

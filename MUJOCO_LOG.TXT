@@ -1,0 +1,9 @@
+Mon Jan 19 09:36:47 2026
+WARNING: mju_openResource: unknown file 'urdf/linker_hand_l10_left/linker_hand_l10_left.xml'
+
+Mon Jan 19 09:38:03 2026
+WARNING: mju_openResource: unknown file 'linker_hand_mujoco/urdf/linker_hand_l10_left/linker_hand_l10_left.xml'
+
+Mon Jan 19 09:38:41 2026
+WARNING: mju_openResource: unknown file 'urdf/linker_hand_l10_left/linker_hand_l10_left.xml'
+

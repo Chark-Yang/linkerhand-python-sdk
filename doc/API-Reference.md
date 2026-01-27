@@ -8,7 +8,7 @@
 This document provides a detailed overview of the Python API for the Linker Hand, including functions for controlling the hand's movements, retrieving sensor data, and setting operational parameters.
 
 
-## Public API
+## Public API(修改：260127，把L20的函数都放到这里了)
 
 ### 设置速度
 ```python
@@ -18,6 +18,12 @@ def set_speed(self,speed=[100,100,100,100,100]) # 设置速度,O6、L6长度为6
 设置手部的运动速度。  
 **Parameters**:  
 - `speed`: 一个包含速度数据的 list，长度为5个元素对应每个关节的速度值，如何是L7则为7个元素，对应每个电机速度。 每个元素值范围:0~255
+
+```python
+def set_joint_speed(self, speed=[100]*5) # 设置速度,O6、L6长度为6，L7长度为7，L10长度为10，其他长度为5,不太懂这个函数是什么意思？
+
+```
+
 
 ---
 
@@ -52,6 +58,10 @@ def set_current(self, current=[99，72，80，66，20]) # L20为例
 **Parameters**:  
 - `current`: 一个包含目标电流数据的 int类型list，长度为5个元素，当前只支持L20版本。每个元素值范围:0~255
 
+### 获取电机电流值
+```python
+def get_current(self)
+```
 ---
 
 ### 获取速度
@@ -91,6 +101,27 @@ return [[255.0, 0.0, 0.0, 77.0, 192.0], [82.0, 0.0, 0.0, 230.0, 223.0], [107.0, 
 - 返回一个二维list，其中每个子list包含不同类别的list压力数据[[法向压力],[切向压力],[切向压力方向],[接近感应]]。类别每一个元素对应拇指、食指、中指、无名指、小拇指
 每个元素值范围:0~255
 ---
+
+### 获取法向压力
+```python
+def _get_normal_force(self)
+```
+
+### 获取切向压力
+```python
+def _get_tangential_force(self)
+```
+
+### 获取切向压力方向
+```python
+def _get_tangential_force_dir(self)
+```
+
+### 获取接近感觉
+```python
+def _get_approach_inc(self)
+```
+
 
 ### 获取版本号
 ```python
@@ -152,6 +183,45 @@ def clear_faults(self)
 **Returns**:  
 无
 ---
+
+### 获取串口号
+```python
+def get_serial_number(self)
+```
+
+```python
+def get_thumb_matrix_touch(self,sleep_time=0):
+        if sleep_time > 0:
+            return self.hand.get_thumb_matrix_touch(sleep_time=sleep_time)
+        else:
+            return self.hand.get_thumb_matrix_touch()
+    
+    def get_index_matrix_touch(self,sleep_time=0):
+        if sleep_time > 0:
+            return self.hand.get_index_matrix_touch(sleep_time=sleep_time)
+        else:
+            return self.hand.get_index_matrix_touch()
+    
+    def get_middle_matrix_touch(self,sleep_time=0):
+        if sleep_time > 0:
+            return self.hand.get_middle_matrix_touch(sleep_time=sleep_time)
+        else:
+            return self.hand.get_middle_matrix_touch()
+    
+    def get_ring_matrix_touch(self,sleep_time=0):
+        if sleep_time > 0:
+            return self.hand.get_ring_matrix_touch(sleep_time=sleep_time)
+        else:
+            return self.hand.get_ring_matrix_touch()
+    
+    def get_little_matrix_touch(self,sleep_time=0):
+        if sleep_time > 0:
+            return self.hand.get_little_matrix_touch(sleep_time=sleep_time)
+        else:
+            return self.hand.get_little_matrix_touch()
+```
+
+
 
 ## Example Usage
 
