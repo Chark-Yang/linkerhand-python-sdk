@@ -1,3 +1,8 @@
+"""
+没有触觉感知，仅大拇指夹取
+张开手掌-->移动到抓取的固定位置-->大拇指移动到固定位置，夹取物体
+"""
+
 import sys
 sys.path.append('/home/chark/linkerhand-python-sdk')
 # print(sys.path)
@@ -7,6 +12,7 @@ import time
 import jkrc  
 
 
+# 封装沿z轴向上移动的函数
 def jaka_linear_move_z(distance):
     robot.login()#登录  
     robot.power_on() #上电  
@@ -53,7 +59,7 @@ linker_hand.finger_move(pose=pose_open)
 time.sleep(3)
 
 
-
+# 机械臂移动到抓取位置
 # 运动模式，绝对运动是0，相对运动是1;阻塞True,非阻塞False
 robot.login()#登录  
 robot.power_on() #上电  
@@ -65,7 +71,7 @@ print("move1")
 robot.joint_move(joint_object,move_mode,True,0.3)  
 
 
-
+# 延时10s,获取关节位置
 time.sleep(10)
 ret = robot.get_joint_position()  
 if ret[0] == 0:  
@@ -75,7 +81,7 @@ else:
 robot.logout()  
 
 
-
+# 判断关节位置是不是抓取位置，如果是，进行抓取
 if(ret[1]==joint_object):
     
     linker_hand.finger_move(pose=pose_grasp0)
@@ -93,8 +99,7 @@ if(ret[1]==joint_object):
 else:
     print('没有成功移动到握手位置')
 
-normal_force = linker_hand._get_normal_force()
-print(normal_force)
+
 
 
 
