@@ -101,10 +101,22 @@ def tactile_monitor():
         tangential_force = get_tangential_force()
         tangential_force_dir = get_tangential_force_dir()
 
-        thumb_normal_force = normal_force[0]
-        thumb_tangential_force = tangential_force[0]
-        thumb_tangential_force_dir = tangential_force_dir[0]
-        print(f"法向压力：{thumb_normal_force};切向压力：{thumb_tangential_force}")
+        # thumb_normal_force = normal_force[0]
+        # thumb_tangential_force = tangential_force[0]
+        # thumb_tangential_force_dir = tangential_force_dir[0]
+        # thumb_normal_force = normal_force[1]
+        # thumb_tangential_force = tangential_force[1]
+        # thumb_tangential_force_dir = tangential_force_dir[1]
+        # # thumb_normal_force = normal_force[2]
+        # thumb_tangential_force = tangential_force[2]
+        # thumb_tangential_force_dir = tangential_force_dir[2]
+        # thumb_normal_force = normal_force[3]
+        # thumb_tangential_force = tangential_force[3]
+        # thumb_tangential_force_dir = tangential_force_dir[3]
+        thumb_normal_force = normal_force[4]
+        thumb_tangential_force = tangential_force[4]
+        thumb_tangential_force_dir = tangential_force_dir[4]
+        print(f"法向压力：{thumb_normal_force};切向压力：{thumb_tangential_force};切向压力方向：{thumb_tangential_force_dir}")
         
         
         if not stop_thumb and thumb_normal_force > force_threshold:
@@ -151,12 +163,12 @@ linker_hand.finger_move(pose=pose_open)
 time.sleep(2)
 
 
-# 大拇指就位，先横摆，再拇指根部弯曲到位
-linker_hand.finger_move(pose=pose_grasp0)
-time.sleep(2)
+# # 大拇指就位，先横摆，再拇指根部弯曲到位
+# linker_hand.finger_move(pose=pose_grasp0)
+# time.sleep(2)
 
-linker_hand.finger_move(pose=pose_grasp1)
-time.sleep(2)
+# linker_hand.finger_move(pose=pose_grasp1)
+# time.sleep(2)
 
 
 
@@ -166,10 +178,10 @@ tactile_thread.start()
 
 
 
-while 1:
+# while 1:
 
-    finger_move_thumb_mcp(2)
-    time.sleep(0.02)
+#     finger_move_thumb_mcp(2)
+#     time.sleep(0.02)
 
     # if(stop_thumb):
     #     break
