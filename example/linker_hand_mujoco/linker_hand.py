@@ -1,3 +1,16 @@
+"""
+使用前，
+（1）cd 到当前目录
+（2）激活环境
+（3）再配置环境变量：
+export QT_PLUGIN_PATH=/home/chark/miniconda3/envs/l20/lib/python3.9/site-packages/PyQt5/Qt5/plugins
+export QT_QPA_PLATFORM_PLUGIN_PATH=/home/chark/miniconda3/envs/l20/lib/python3.9/site-packages/PyQt5/Qt5/plugins/platforms
+export LD_LIBRARY_PATH=/home/chark/miniconda3/envs/l20/lib/python3.9/site-packages/PyQt5/Qt5/lib:$LD_LIBRARY_PATH
+
+QT_QPA_PLATFORM=xcb python /home/chark/linkerhand-python-sdk/example/linker_hand_mujoco/linker_hand.py
+"""
+
+
 import sys
 import threading
 import numpy as np

@@ -1,3 +1,7 @@
+"""
+数据曲线绘制
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.widgets import Cursor
