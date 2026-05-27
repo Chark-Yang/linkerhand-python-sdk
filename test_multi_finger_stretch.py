@@ -1,6 +1,6 @@
 """
 特点: 感知到触觉,停止夹紧,2个线程
-运动流程:手掌张开->大拇指横摆就位->大拇指根部弯曲到位->其余四指预备抓取到位 ->5根手指同时步进弯曲,直到触觉检测到接触,哪根手指触觉力到达阈值就停止哪根手指的弯曲
+运动流程:手掌张开到预备抓取姿势->完整张开
 """
 
 import sys
@@ -56,7 +56,7 @@ def get_approach_inc():
 
 
 # 小指、无名指、中指、食指,拇指步进弯曲
-def finger_bend_5_fingers(mcp_step = 5, pip_step = 5):
+def finger_stretch_5_fingers(mcp_step = 5, pip_step = 5):
         global value_pinky_mcp, value_pinky_pip, value_ring_mcp, value_ring_pip, value_middle_mcp, value_middle_pip, value_index_mcp, value_index_pip,value_thumb_mcp
         global stop_pinky, stop_ring, stop_middle, stop_index,stop_thumb
         
@@ -64,57 +64,56 @@ def finger_bend_5_fingers(mcp_step = 5, pip_step = 5):
             return
 
         if(not stop_pinky):
-            value_pinky_mcp -= mcp_step
-            value_pinky_pip -= pip_step
+            value_pinky_mcp += mcp_step
+            value_pinky_pip += pip_step
 
         if(not stop_ring):
-            value_ring_mcp -= mcp_step
-            value_ring_pip -= pip_step
+            value_ring_mcp += mcp_step
+            value_ring_pip += pip_step
 
         if(not stop_middle):
-            value_middle_mcp -= mcp_step
-            value_middle_pip -= pip_step
+            value_middle_mcp += mcp_step
+            value_middle_pip += pip_step
 
         if(not stop_index):
-            value_index_mcp -= mcp_step
-            value_index_pip -= pip_step
-        
+            value_index_mcp += mcp_step
+            value_index_pip += pip_step
+
         if(not stop_thumb):
-            value_thumb_mcp -= mcp_step+3
+            value_thumb_mcp += mcp_step
 
-        if value_pinky_mcp < 0:
-            value_pinky_mcp = 0
-        if value_pinky_pip < 0:
-            value_pinky_pip = 0
+        if value_pinky_mcp >= 199:
+            value_pinky_mcp = 199
+        if value_pinky_pip >= 148:
+            value_pinky_pip = 148
 
-        if value_ring_mcp < 0:
-            value_ring_mcp = 0
-        if value_ring_pip < 0:
-            value_ring_pip = 0
-        
-        if value_middle_mcp < 0:
-            value_middle_mcp = 0
-        if value_middle_pip < 0:
-            value_middle_pip = 0
-            
-        if value_index_mcp < 0:
-            value_index_mcp = 0
-        if value_index_pip < 0:
-            value_index_pip = 0
+        if value_ring_mcp >= 199:
+            value_ring_mcp = 199
+        if value_ring_pip >= 148:
+            value_ring_pip = 148
 
-        if value_thumb_mcp < 0:
-            value_thumb_mcp = 0
+        if value_middle_mcp >= 199:
+            value_middle_mcp = 199
+        if value_middle_pip >= 148:
+            value_middle_pip = 148
 
-        if(value_pinky_mcp != 0 or value_pinky_pip != 0 or value_ring_mcp != 0 or value_ring_pip != 0 or value_middle_mcp != 0 or value_middle_pip != 0 or value_index_mcp != 0 or value_index_pip != 0 or value_thumb_mcp != 0):
+        if value_index_mcp >= 199:
+            value_index_mcp = 199
+        if value_index_pip >= 148:
+            value_index_pip = 148
+
+        if value_thumb_mcp >= 255:
+            value_thumb_mcp = 255
+
+        if(value_pinky_mcp != 199 or value_pinky_pip != 148 or value_ring_mcp != 199 or value_ring_pip != 148 or value_middle_mcp != 199 or value_middle_pip != 148 or value_index_mcp != 199 or value_index_pip != 148 or value_thumb_mcp != 255):
             linker_hand.finger_move([202, value_index_mcp, value_middle_mcp, value_ring_mcp, value_pinky_mcp, 150, 37, 100, 180, 240, 0, 255, 255, 255, 255, value_thumb_mcp, value_index_pip, value_middle_pip, value_ring_pip, value_pinky_pip])
         else:
-            print(linker_hand.get_state())
+            linker_hand.finger_move(pose_open)
             stop_index = True
             stop_middle = True
             stop_ring = True        
             stop_pinky = True
             stop_thumb = True
-
 
 
 # stop_thumb = False
@@ -239,23 +238,27 @@ linker_hand.set_speed(speed=[120,200,200,200,200])
 
 
 # 手掌先张开，避免移动过程中与其他物体接触
-linker_hand.finger_move(pose=pose_open)
+# linker_hand.finger_move(pose=pose_open)
+# time.sleep(2)
+
+hand_init_state = linker_hand.get_state()
+print(f"hand_init_state:{hand_init_state}")
 time.sleep(2)
 
 
 # 启动触觉监听线程
-tactile_thread = threading.Thread(target=tactile_pinky_ring_monitor)
-tactile_thread.start()
+# tactile_thread = threading.Thread(target=tactile_pinky_ring_monitor)
+# tactile_thread.start()
 
 # 大拇指就位，先横摆
-linker_hand.finger_move(pose=pose_grasp0)
-print("大拇指横摆就位")
-time.sleep(2)
+# linker_hand.finger_move(pose=pose_grasp0)
+# print("大拇指横摆就位")
+# time.sleep(2)
 
 # 拇指根部弯曲到位，稍微弯曲
-linker_hand.finger_move(pose=pose_grasp1)
-print("大拇指根部弯曲到位")
-time.sleep(2)
+# linker_hand.finger_move(pose=pose_grasp1)
+# print("大拇指根部弯曲到位")
+# time.sleep(2)
 
 
 # 拇指末端弯曲，直到触觉检测到接触
@@ -265,27 +268,30 @@ time.sleep(2)
 
 
 # 获取预备抓取姿势对应位置的值
-value_pinky_mcp = pose_5_fingers_grasp2[4]
-value_pinky_pip = pose_5_fingers_grasp2[19]
+value_pinky_mcp = hand_init_state[4]
+value_pinky_pip = hand_init_state[19]
 
-value_ring_mcp = pose_5_fingers_grasp2[3]
-value_ring_pip = pose_5_fingers_grasp2[18]
+value_ring_mcp = hand_init_state[3]
+value_ring_pip = hand_init_state[18]
 
-value_middle_mcp = pose_5_fingers_grasp2[2]
-value_middle_pip = pose_5_fingers_grasp2[17]
+value_middle_mcp = hand_init_state[2]
+value_middle_pip = hand_init_state[17]
 
-value_index_mcp = pose_5_fingers_grasp2[1]
-value_index_pip = pose_5_fingers_grasp2[16]
+value_index_mcp = hand_init_state[1]
+value_index_pip = hand_init_state[16]
 
-value_thumb_mcp = pose_5_fingers_grasp2[15]
-
-
-# 其余4指就位，预备抓取
-linker_hand.finger_move(pose=pose_5_fingers_grasp2)
-time.sleep(2)
+value_thumb_mcp = hand_init_state[15]
 
 
 while not (stop_pinky and stop_ring and stop_middle and stop_index and stop_thumb):
-    finger_bend_5_fingers(2, 2)
-    time.sleep(0.05)
+    finger_stretch_5_fingers(2,2)
+
+# 拇指及其余4指就位，预备抓取
+# linker_hand.finger_move(pose=pose_5_fingers_grasp2)
+# time.sleep(2)
+
+
+# while not (stop_pinky and stop_ring and stop_middle and stop_index and stop_thumb):
+#     finger_move_pinky_mcp_pip(2, 2)
+#     time.sleep(0.05)
 
